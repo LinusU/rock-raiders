@@ -11,7 +11,7 @@ class RRToolstation extends RTS.Building
 
     RRToolstation.all.push @
 
-    setTimeout (=> @mainLoop()), 100
+    setTimeout (=> @mainLoop()), 1000
   mainLoop: ->
     if @busy or @block.opts.hidden
       setTimeout (=> @mainLoop()), 1000
@@ -21,7 +21,9 @@ class RRToolstation extends RTS.Building
       [tx, ty] = @xyForEntrance()
       obj = new RR.Pilot @map, { x: @opts.x, y: @opts.y, heading: @opts.heading }
       obj.walkTo tx, ty
-      setTimeout (=> @busy = false; @work = null; @mainLoop()), 1000
+      setTimeout (=> @busy = false; @mainLoop()), 1000
+    else
+      setTimeout (=> @mainLoop()), 330
   destroy: ->
     RRToolstation.all.remove @
     super
