@@ -3,6 +3,7 @@ VZ = new THREE.Vector3(0, 0, 1)
 
 class RTSObject
   constructor: (@map, @opts) ->
+    @predicted = {}
     @mesh = new THREE.Mesh @geometry(), @material()
     @mesh.rotateOnAxis VZ, (Math.PI / 180) * (@opts.heading || 0)
     @mesh.position.set @opts.x * 10, @opts.y * 10, 0

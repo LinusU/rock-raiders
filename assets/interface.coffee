@@ -57,6 +57,25 @@ class RRInterface
       @workQueue.deq()
     else
       null
+  findWork: (pilot) ->
+    for r in RTS.Resource.all
+      if !(r.isPickedUpBy or r.predicted.isPickedUpBy)
+        ts = r.findToolstation()
+        if ts
+          w = new RTS.Work { action: 'collect-resource', obj: r, building: ts }
+          if pilot.canDoWork w
+            r.predicted.isPickedUpBy = pilot
+            return w
+    for b in RTS.Block.allWithRubble
+      if b.predicted.rubble is undefined or b.predicted.rubble > 0
+        w = new RTS.Work { action: 'clear-rubble', block: b }
+        if pilot.canDoWork w
+          if b.predicted.rubble is undefined
+            b.predicted.rubble = b.opts.rubble - 1
+          else
+            b.predicted.rubble--
+          return w
+    return null
   runAction: (action, ctx) ->
     switch action
       when 'drill-wall' then @addWork new RTS.Work { action: action, block: ctx, ordered: true }

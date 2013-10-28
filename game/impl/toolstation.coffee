@@ -21,6 +21,7 @@ class RRToolstation extends RTS.Building
       [tx, ty] = @xyForEntrance()
       obj = new RR.Pilot @map, { x: @opts.x, y: @opts.y, heading: @opts.heading }
       obj.walkTo tx, ty
+      obj.idle = 50
       setTimeout (=> @busy = false; @mainLoop()), 1000
     else
       setTimeout (=> @mainLoop()), 330

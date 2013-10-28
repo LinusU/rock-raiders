@@ -2,8 +2,10 @@
 VZ = new THREE.Vector3(0, 0, 1)
 
 class RTSBlock
+  @allWithRubble: []
   @materials: {}
   constructor: (@map, @opts) ->
+    @predicted = {}
     @resources = { ore: 0, crystal: 0 }
   click: (point) ->
     if @opts.hidden
@@ -171,6 +173,7 @@ class RTSBlock
   collapse: (noRubble = false) ->
     @opts.type = 'floor'
     @opts.rubble = (if noRubble then 0 else 4)
+    if @opts.rubble > 0 then RTSBlock.allWithRubble.push @
     rand = -> 0.2 + (Math.random() * 0.6)
     repeat @resources.ore, => new RR.Ore @map, { x: @opts.x + rand(), y: @opts.y + rand() }
     repeat @resources.crystal, => new RR.Crystal @map, { x: @opts.x + rand(), y: @opts.y + rand() }
@@ -193,6 +196,7 @@ class RTSBlock
       @updateMesh()
       rand = -> 0.2 + (Math.random() * 0.6)
       new RR.Ore @map, { x: @opts.x + rand(), y: @opts.y + rand() }
+      if @opts.rubble is 0 then RTSBlock.allWithRubble.remove @
   xyForDrillWall: ->
     adj = @getAdj [1, 3, 5, 7]
     if adj[0] is 'F'

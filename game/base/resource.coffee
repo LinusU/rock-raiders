@@ -1,7 +1,12 @@
 
 class RTSResource extends RTS.Object
+  @all: []
   constructor: (@map, @opts) ->
     @opts.heading = Math.random() * 360
+    super
+    RTSResource.all.push @
+  destroy: ->
+    RTSResource.all.remove @
     super
   findToolstation: ->
     for ts in RR.Toolstation.all

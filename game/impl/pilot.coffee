@@ -7,6 +7,7 @@ class RRPilot extends RTS.Unit
   material: -> material
   constructor: ->
     super
+    @idle = 0
     @work = null
     @busy = false
     @carryingObject = null
@@ -24,7 +25,12 @@ class RRPilot extends RTS.Unit
           @work = w
         else
           @map.game.interface.addWork w
+    if @work is null
+      if @idle++ > 50
+        @idle = 0
+        @work = @map.game.interface.findWork @
     if @work
+      @idle = 0
       if (@work.x is @work.y is null) or @opts.x * 10 is @work.x and @opts.y * 10 is @work.y
         @executeWork cb
       else
