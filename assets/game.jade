@@ -1,0 +1,19 @@
+!!! 5
+html
+  head
+    title Rock Raiders
+    script(type='text/javascript').
+      window.LOG = function () {
+        var el = document.createElement('div');
+        el.innerText = Array.prototype.join.call(arguments, ', ');
+        document.querySelector('#log').appendChild(el, 0);
+      };
+    link(rel='stylesheet', type='text/css', href='/game.css')
+    script(type='text/javascript', src='/rock-raiders.js')
+  body
+    div#log(style='position: absolute; left: 0; top: 0; height: 440px; padding: 10px; font-size: 8pt; font-family: monospace;')
+    #game
+    script(type='text/javascript').
+      var div = document.querySelector('#game');
+      var game = new RockRaiders(div);
+      game.render();

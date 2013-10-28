@@ -1,0 +1,67 @@
+
+html, body
+  padding 0
+  margin 0
+  font-family sans-serif
+
+#game
+  position relative
+  width 640px
+  height 480px
+  border 4px solid black
+  margin 0 auto
+  canvas
+    position absolute
+
+.rr-interface
+  position absolute
+  width 640px
+  height 480px
+  background-image url(texture/RightPanel/CrystalSideBar.bmp)
+  background-position right top
+  background-repeat no-repeat
+  .rr-interface-mf, .rr-interface-ore, .rr-interface-crystal
+    position absolute
+    width 24px
+    font-size 8pt
+    color white
+    font-weight bold
+    text-align center
+    pointer-events none
+  .rr-interface-mf
+    top 22px
+    right 52px
+    text-align left
+    text-shadow 1px 1px 0 black
+  .rr-interface-ore
+    right 26px
+    bottom 0
+  .rr-interface-crystal
+    right 2px
+    bottom 0
+  .rr-interface-buttons
+    position absolute
+    top 20px
+    right 40px
+    width 40px
+    height 40px
+  .rr-interface-button
+    width 40px
+    height 40px
+  .rr-btn-clear-rubble
+    background-image url(texture/Menus/ClearRubble.bmp)
+  .rr-btn-build-path
+    background-image url(texture/Menus/buildpath.bmp)
+  .rr-btn-drill-wall
+    background-image url(texture/Menus/drill.bmp)
+  .rr-btn-teleport-pilot
+    background-image url(texture/Icons/minifigures.bmp)
+  .rr-btn-menu-building
+    background-image url(texture/Menus/building.bmp)
+  .rr-btn-main-menu
+    margin-bottom 12px
+    background-image url(texture/Menus/Back.bmp)
+  .rr-btn-pickup-object
+    background-image url(texture/Menus/MF_Pickup.bmp)
+  .rr-btn-drop-object
+    background-image url(texture/Menus/UnloadMinifigure.bmp)

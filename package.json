@@ -1,0 +1,10 @@
+{
+  "name": "rock-raiders",
+  "version": "0.1.0",
+  "main": "index.js",
+  "dependencies": {
+    "coffee-script": "~1.6.3",
+    "assman": "~0.1.4",
+    "express": "~3.4.3"
+  }
+}
