@@ -23,13 +23,13 @@ class RTSBlock
         @map.game.selected.clear()
         @map.game.interface.mainMenu()
     else
-      btns = [ 'main-menu' ]
+      btns = []
       if @opts.type is 'floor'
         if (@opts.rubble || 0) > 0 then btns.push 'clear-rubble'
         if (@opts.rubble || 0) < 1 then btns.push 'build-path'
       if @opts.type is 'wall' and @opts.wallType in [1, 2]
         if @opts.strength < 4 then btns.push 'drill-wall'
-      if btns.length > 1
+      if btns.length > 0
         @map.game.interface.setButtons btns, @
   getAdj: (num) =>
     adj = ''

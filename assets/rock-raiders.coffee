@@ -74,7 +74,7 @@ class RockRaiders
     @projector = new THREE.Projector
     @raycaster = new THREE.Raycaster
 
-    @div.addEventListener 'mousedown', (event) =>
+    @div.addEventListener 'click', (event) =>
       style = window.getComputedStyle @div
       @mouse.x = ((event.pageX - @div.offsetLeft - parseInt(style.borderLeftWidth)) / WIDTH) * 2 - 1
       @mouse.y = -((event.pageY - @div.offsetTop - parseInt(style.borderTopWidth)) / HEIGHT) * 2 + 1

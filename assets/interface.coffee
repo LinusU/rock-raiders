@@ -85,7 +85,7 @@ class RRInterface
       when 'teleport-pilot' then @mfQueue++
       when 'drop-object' then ctx.demandWork new RTS.Work { action: action, pilot: ctx }
       when 'main-menu' then @game.selected.clear()
-      when 'menu-building' then @setButtons [ 'main-menu' ]
+      when 'menu-building' then @setButtons []
       else NotImplemented()
     if action not in [ 'menu-building' ]
       @mainMenu()
@@ -93,13 +93,18 @@ class RRInterface
     @setButtons [
       'teleport-pilot'
       'menu-building'
-    ], null
-  setButtons: (btns, ctx) ->
+      'menu-small-vehicle'
+      'menu-big-vehicle'
+    ], null, false
+  setButtons: (btns, ctx, showBack = true) ->
+    cls = 'rr-interface-buttons-' + (btns.length) + (if showBack then '' else '-woback')
     @buttons.innerHTML = ''
+    @buttons.className = 'rr-interface-buttons ' + cls
+    if showBack then btns.unshift 'main-menu'
     btns.forEach (btn) =>
       div = document.createElement 'div'
       div.className = 'rr-interface-button rr-btn-' + btn
-      div.addEventListener 'mousedown', ((e) => @runAction(btn, ctx); e.stopPropagation()), false
+      div.addEventListener 'click', ((e) => @runAction(btn, ctx); e.stopPropagation()), false
       @buttons.appendChild div
 
 window.RRInterface = RRInterface

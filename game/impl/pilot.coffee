@@ -89,8 +89,9 @@ class RRPilot extends RTS.Unit
           cb()
         ), 160
   click: ->
-    btns = [ 'main-menu' ]
+    btns = []
     if @carryingObject then btns.push 'drop-object'
+    btns.push 'delete'
     @map.game.selected.pilot = @
     @map.game.interface.setButtons btns, @
   canDoWork: (w) ->

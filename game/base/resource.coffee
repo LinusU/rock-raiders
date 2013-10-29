@@ -20,6 +20,6 @@ class RTSResource extends RTS.Object
       @map.game.selected.clear()
       @map.game.interface.mainMenu()
     else
-      @map.game.interface.setButtons [ 'main-menu', 'pickup-object' ], @
+      @map.game.interface.setButtons [ 'pickup-object' ], @
 
 window.RTS.Resource = RTSResource
