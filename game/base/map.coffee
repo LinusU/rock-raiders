@@ -16,15 +16,16 @@ binaryRequest = (url, cb) ->
 
 class RTSMap
   constructor: (@game) ->
-    binaryRequest "LegoRR0/Levels/GameLevels/Level01/Surf_01.map", (err, data) => @loadSurf data
+    @lvl = '02'
+    binaryRequest "LegoRR0/Levels/GameLevels/Level#{@lvl}/Surf_#{@lvl}.map", (err, data) => @loadSurf data
   fetchDugg: ->
-    binaryRequest "LegoRR0/Levels/GameLevels/Level01/Dugg_01.map", (err, data) => @loadDugg data
+    binaryRequest "LegoRR0/Levels/GameLevels/Level#{@lvl}/Dugg_#{@lvl}.map", (err, data) => @loadDugg data
   fetchCror: ->
-    binaryRequest "LegoRR0/Levels/GameLevels/Level01/Cror_01.map", (err, data) => @loadCror data
+    binaryRequest "LegoRR0/Levels/GameLevels/Level#{@lvl}/Cror_#{@lvl}.map", (err, data) => @loadCror data
   fetchOL: ->
 
     xhr = new XMLHttpRequest
-    xhr.open "GET", "LegoRR0/Levels/GameLevels/Level01/01.ol", true
+    xhr.open "GET", "LegoRR0/Levels/GameLevels/Level#{@lvl}/#{@lvl}.ol", true
     xhr.onload = => @loadOL xhr.responseText
     xhr.send()
 
@@ -82,7 +83,6 @@ class RTSMap
         else NotImplemented()
 
     @blocks.map (row) => row.map (block) => block.updateOpts()
-    @blocks.map (row) => row.map (block) => block.createMesh()
     @fetchCror()
 
   loadCror: (data) ->
@@ -124,5 +124,8 @@ class RTSMap
         when 'SmallSpider', 'Pilot', 'Toolstation'
           objs[arguments[1]] = new RR[opts.type] @, opts
         else NotImplemented()
+    @loadFinish()
+  loadFinish: ->
+    @blocks.map (row) => row.map (block) => block.createMesh()
 
 window.RTS.Map = RTSMap

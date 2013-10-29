@@ -14,7 +14,7 @@ class RTSObject
   canWalkTo: (tx, ty) ->
     @map.getWalkPath(Math.round(@opts.x * 10), Math.round(@opts.y * 10), tx, ty).length > 0
   deltaXY: ->
-    switch @opts.heading
+    switch Math.round(@opts.heading)
       when 0 then [0, -1]
       when 90 then [-1, 0]
       when 180 then [0, 1]
