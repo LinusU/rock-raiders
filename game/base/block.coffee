@@ -27,9 +27,10 @@ class RTSBlock
       if @opts.type is 'floor'
         if (@opts.rubble || 0) > 0 then btns.push 'clear-rubble'
         if (@opts.rubble || 0) < 1 then btns.push 'build-path'
-      if @opts.type is 'wall'
+      if @opts.type is 'wall' and @opts.wallType in [1, 2]
         if @opts.strength < 4 then btns.push 'drill-wall'
-      @map.game.interface.setButtons btns, @
+      if btns.length > 1
+        @map.game.interface.setButtons btns, @
   getAdj: (num) =>
     adj = ''
     for i in num
@@ -144,7 +145,7 @@ class RTSBlock
         when 2 then zs = [0, 0, 1, 0]
         when 3 then zs = [1, 0, 1, 1]
         when 4 then zs = [0, 1, 1, 0]
-        else console.log(@opts.wallType); assert false
+        else assert false
 
     geo = new THREE.Geometry
 
