@@ -26,7 +26,7 @@ class RRPilot extends RTS.Unit
         else
           @map.game.interface.addWork w
     if @work is null
-      if @idle++ > 50
+      if @idle++ > 30 + (Math.random() * 30)
         @idle = 0
         @work = @map.game.interface.findWork @
     if @work
