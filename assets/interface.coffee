@@ -2,6 +2,7 @@
 class RRInterface
   constructor: (@game) ->
     @mfQueue = 0
+    @resQueue = { Ore: [], Crystal: [] }
     @workQueue = new PriorityQueue (a, b) -> a.priority - b.priority
     @domElement = document.createElement 'div'
     @domElement.className = 'rr-interface'
@@ -50,6 +51,21 @@ class RRInterface
           @text[2].textContent = newVal
           val = parseInt newVal
     @mainMenu()
+  demandResource: (type, work) ->
+    @resQueue[type].push work
+  depositResouce: (r) ->
+    w = null
+    for item in @resQueue[r.name()]
+      if r.canWalkTo item.x, item.y
+        w = item
+        break
+    if w isnt null
+      @resQueue[r.name()].remove w
+    else
+      ts = r.findToolstation()
+      if ts
+        w = new RTS.Work { action: 'store-object', obj: r, building: ts }
+    return w
   addWork: (w) ->
     @workQueue.enq w
   getWork: ->
@@ -57,6 +73,35 @@ class RRInterface
       @workQueue.deq()
     else
       null
+  findWork: (pilot) ->
+    for r in RTS.Resource.all
+      if !(r.isPickedUpBy or r.predicted.isPickedUpBy or r.belongsToBuilding)
+        w = new RTS.Work { action: 'pickup-object', obj: r }
+        if pilot.canDoWork w
+          w2 = @depositResouce r
+          if w2
+            w.nextWork = w2
+            r.predicted.isPickedUpBy = pilot
+            return w
+    if @ore > 0
+      for item in @resQueue.Ore
+        ts = item.block.findToolstation()
+        if ts
+          @ore--
+          w = new RTS.Work { action: 'withdraw-resource', type: 'ore', building: ts }
+          w.nextWork = item
+          @resQueue.Ore.remove item
+          return w
+    for b in RTS.Block.allWithRubble
+      if b.predicted.rubble is undefined or b.predicted.rubble > 0
+        w = new RTS.Work { action: 'clear-rubble', block: b }
+        if pilot.canDoWork w
+          if b.predicted.rubble is undefined
+            b.predicted.rubble = b.opts.rubble - 1
+          else
+            b.predicted.rubble--
+          return w
+    return null
   showBriefingPanel: (title, pages, cb) ->
     i = 0
     click = =>
@@ -93,30 +138,11 @@ class RRInterface
     win.querySelector('.btn-close').addEventListener 'click', (-> click false), false
     win.querySelector('.btn-continue').addEventListener 'click', (-> click true), false
     @domElement.appendChild win
-  findWork: (pilot) ->
-    for r in RTS.Resource.all
-      if !(r.isPickedUpBy or r.predicted.isPickedUpBy)
-        ts = r.findToolstation()
-        if ts
-          w = new RTS.Work { action: 'collect-resource', obj: r, building: ts }
-          if pilot.canDoWork w
-            r.predicted.isPickedUpBy = pilot
-            return w
-    for b in RTS.Block.allWithRubble
-      if b.predicted.rubble is undefined or b.predicted.rubble > 0
-        w = new RTS.Work { action: 'clear-rubble', block: b }
-        if pilot.canDoWork w
-          if b.predicted.rubble is undefined
-            b.predicted.rubble = b.opts.rubble - 1
-          else
-            b.predicted.rubble--
-          return w
-    return null
   runAction: (action, ctx) ->
     switch action
       when 'drill-wall' then @addWork new RTS.Work { action: action, block: ctx, ordered: true }
       when 'clear-rubble' then [0..3].map => @addWork new RTS.Work { action: action, block: ctx, ordered: true }
-      when 'build-path' then @addWork new RTS.Work { action: action, block: ctx, ordered: true }
+      when 'build-path' then ctx.demandPath()
       when 'pickup-object' then @addWork new RTS.Work { action: action, obj: ctx, ordered: true }
       when 'teleport-pilot' then @mfQueue++
       when 'drop-object' then ctx.demandWork new RTS.Work { action: action, pilot: ctx }

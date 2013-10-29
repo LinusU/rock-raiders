@@ -146,7 +146,8 @@ class RTSMap
 
     @loadFinish()
   loadFinish: ->
-    @blocks.map (row) => row.map (block) => block.createMesh()
-    @game.interface.showBriefingPanel 'Mission Objective', @strings['Objective'].split('\\a'), ->
+    # MAYBE @blocks.map (row) => row.map (block) => block.updateOpts()
+    @blocks.map (row) => row.map (block) => block.refreshMesh()
+    # @game.interface.showBriefingPanel 'Mission Objective', @strings['Objective'].split('\\a'), ->
 
 window.RTS.Map = RTSMap

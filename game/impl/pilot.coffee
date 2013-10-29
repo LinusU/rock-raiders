@@ -38,56 +38,64 @@ class RRPilot extends RTS.Unit
     else
       cb()
   executeWork: (cb) ->
+    done = =>
+      w2 = @work.getFollowUp()
+      @busy = false
+      @work = null
+      if w2 then @demandWork w2
+      cb()
     switch @work.action
       when 'drill-wall'
         @busy = true
         setTimeout =>
           @work.block.collapse()
-          @busy = false
-          @work = null
-          cb()
+          done()
         , 2000
       when 'clear-rubble'
         @busy = true
-        setTimeout (r = =>
+        setTimeout (=>
           @work.block.decreaseRubble()
-          @busy = false
-          @work = null
-          cb()
+          done()
         ), 1000
-      when 'pickup-object', 'collect-resource'
+      when 'pickup-object'
         @busy = true
-        setTimeout (r = =>
-          w = @work
-          @pickupObject w.obj
-          @busy = false
-          @work = null
-          if w.action is 'collect-resource'
-            @demandWork w.nextWork
-          else
-            @storeCurrentObject()
-          cb()
+        setTimeout (=>
+          @pickupObject @work.obj
+          done()
         ), 320
       when 'drop-object'
         @busy = true
-        setTimeout (r = =>
+        setTimeout (=>
           @dropObject()
-          @busy = false
-          @work = null
-          cb()
+          done()
         ), 160
       when 'store-object'
         @busy = true
-        setTimeout (r = =>
+        setTimeout (=>
+          assert @carryingObject is @work.obj
+          @dropObject()
+          @work.obj.destroy()
+          if @work.obj.name() is 'Ore' then @map.game.interface.ore++
+          if @work.obj.name() is 'Crystal' then @map.game.interface.crystal++
+          done()
+        ), 160
+      when 'deposit-resource'
+        @busy = true
+        setTimeout (=>
           obj = @carryingObject
           @dropObject()
-          obj.destroy()
-          if obj.name() is 'Ore' then @map.game.interface.ore++
-          if obj.name() is 'Crystal' then @map.game.interface.crystal++
-          @busy = false
-          @work = null
-          cb()
+          obj.belongsToBuilding = true
+          @work.block.notifyResource obj
+          done()
         ), 160
+      when 'withdraw-resource'
+        @busy = true
+        setTimeout (=>
+          assert @work.type is 'ore'
+          obj = new RR.Ore @map, { x: @opts.x, y: @opts.y }
+          @pickupObject obj
+          done()
+        ), 320
   click: ->
     btns = []
     if @carryingObject then btns.push 'drop-object'
@@ -96,8 +104,10 @@ class RRPilot extends RTS.Unit
     @map.game.interface.setButtons btns, @
   canDoWork: (w) ->
     switch w.action
-      when 'drill-wall', 'clear-rubble', 'collect-resource', 'pickup-object'
+      when 'drill-wall', 'clear-rubble', 'pickup-object'
         (@carryingObject is null) and (@canWalkTo w.x, w.y)
+      when 'deposit-resource'
+        @canWalkTo w.x, w.y
       when 'store-object'
         if w.building
           [tx, ty] = w.building.xyForEntrance()
@@ -107,12 +117,6 @@ class RRPilot extends RTS.Unit
           if ts then w.setBuilding ts
           (ts isnt null)
       else false
-  findToolstation: ->
-    for ts in RR.Toolstation.all
-      if ts.block.hidden then continue
-      [tx, ty] = ts.xyForEntrance()
-      if @canWalkTo(tx, ty) then return ts
-    return null
   pickupObject: (obj) ->
     assert @carryingObject is null
     @carryingObject = obj

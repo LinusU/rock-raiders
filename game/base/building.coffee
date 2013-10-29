@@ -4,11 +4,11 @@ class RTSBuilding extends RTS.Object
     super
 
     @block = @map.getBlock Math.floor(@opts.x), Math.floor(@opts.y)
-    @block.hasBuilding = true
+    @block.building = @
 
     [dx, dy] = @deltaXY()
     @entrance = @map.getBlock(Math.floor(@opts.x) + dx, Math.floor(@opts.y) + dy)
-    @entrance.hasBuilding = true
+    @entrance.building = @
 
   xyForEntrance: ->
     rand = -> Math.round(4 + Math.random() * 2)

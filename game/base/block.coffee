@@ -1,12 +1,17 @@
 
 VZ = new THREE.Vector3(0, 0, 1)
 
-class RTSBlock
+class RTSBlock extends RTS.Object
+  @PP_NONE: 0
+  @PP_PLAN: 1
+  @PP_PATH: 2
   @allWithRubble: []
   @materials: {}
   constructor: (@map, @opts) ->
-    @predicted = {}
+    @_noMesh = true
+    super
     @resources = { ore: 0, crystal: 0 }
+    @powerpath = RTSBlock.PP_NONE
   click: (point) ->
     if @opts.hidden
       return
@@ -66,63 +71,46 @@ class RTSBlock
 
     if @opts.type is 'wall'
       switch @getAdj [1, 3, 5, 7]
-        when 'WWWF' then @opts.r = 2; @opts.wallType = 1;
-        when 'WWFW' then @opts.r = 1; @opts.wallType = 1;
-        when 'WFWW' then @opts.r = 3; @opts.wallType = 1;
-        when 'FWWW' then @opts.r = 0; @opts.wallType = 1;
+        when 'WWWF' then @opts.heading = 180; @opts.wallType = 1;
+        when 'WWFW' then @opts.heading = 90; @opts.wallType = 1;
+        when 'WFWW' then @opts.heading = 270; @opts.wallType = 1;
+        when 'FWWW' then @opts.heading = 0; @opts.wallType = 1;
 
-        when 'WWFF' then @opts.r = 1; @opts.wallType = 2;
-        when 'WFWF' then @opts.r = 2; @opts.wallType = 2;
-        when 'FFWW' then @opts.r = 3; @opts.wallType = 2;
-        when 'FWFW' then @opts.r = 0; @opts.wallType = 2;
+        when 'WWFF' then @opts.heading = 90; @opts.wallType = 2;
+        when 'WFWF' then @opts.heading = 180; @opts.wallType = 2;
+        when 'FFWW' then @opts.heading = 270; @opts.wallType = 2;
+        when 'FWFW' then @opts.heading = 0; @opts.wallType = 2;
 
         when 'WWWW'
           switch @getAdj [0, 2, 6, 8]
-            when 'WWWF' then @opts.r = 1; @opts.wallType = 3;
-            when 'WWFW' then @opts.r = 2; @opts.wallType = 3;
-            when 'WFWW' then @opts.r = 0; @opts.wallType = 3;
-            when 'FWWW' then @opts.r = 3; @opts.wallType = 3;
-            when 'FWWF' then @opts.r = 0; @opts.wallType = 4;
-            when 'WFFW' then @opts.r = 1; @opts.wallType = 4;
+            when 'WWWF' then @opts.heading = 90; @opts.wallType = 3;
+            when 'WWFW' then @opts.heading = 180; @opts.wallType = 3;
+            when 'WFWW' then @opts.heading = 0; @opts.wallType = 3;
+            when 'FWWW' then @opts.heading = 270; @opts.wallType = 3;
+            when 'FWWF' then @opts.heading = 0; @opts.wallType = 4;
+            when 'WFFW' then @opts.heading = 90; @opts.wallType = 4;
             else
               # Just wait
         else
           @collapse()
 
-  createMesh: ->
-
-    @updateOpts()
-
-    @mesh = new THREE.Mesh @getGeometry(), @getMaterial()
-    @mesh.position.set @opts.x * 10 + 5, @opts.y * 10 + 5, 0
-    @mesh.rotateOnAxis VZ, (Math.PI / 2) * (@opts.r || 0)
-    @mesh._on_click = => @click.apply @, arguments
-    @map.game.scene.add @mesh
-
-  updateMesh: ->
-
-    @map.game.scene.remove @mesh
-
-    @mesh = new THREE.Mesh @getGeometry(), @getMaterial()
-    @mesh.position.set @opts.x * 10 + 5, @opts.y * 10 + 5, 0
-    @mesh.rotateOnAxis VZ, (Math.PI / 2) * (@opts.r || 0)
-    @mesh._on_click = => @click.apply @, arguments
-    @map.game.scene.add @mesh
-
-  getMaterial: ->
+  material: ->
     if @opts.hidden then return RTSBlock.materials[70]
     switch @opts.type
       when 'water' then RTSBlock.materials[45]
       when 'lava' then RTSBlock.materials[46]
       when 'floor'
-        if @hasBuilding
+        if @building
           return RTSBlock.materials[76]
-        switch @opts.rubble
+        else if @opts.rubble then switch @opts.rubble
           when 1 then RTSBlock.materials[13]
           when 2 then RTSBlock.materials[12]
           when 3 then RTSBlock.materials[11]
           when 4 then RTSBlock.materials[10]
-          else RTSBlock.materials[0]
+        else switch @powerpath
+          when 0 then RTSBlock.materials[0]
+          when 1 then RTSBlock.materials[61]
+          when 2 then RTSBlock.materials[60]
       when 'wall'
         switch @opts.wallType
           when 1 then RTSBlock.materials[ 1 + @opts.strength]
@@ -132,7 +120,7 @@ class RTSBlock
           else assert false
       else NotImplemented()
 
-  getGeometry: ->
+  geometry: ->
 
     if @opts.hidden
       zs = [1, 1, 1, 1]
@@ -180,7 +168,7 @@ class RTSBlock
     repeat @resources.ore, => new RR.Ore @map, { x: @opts.x + rand(), y: @opts.y + rand() }
     repeat @resources.crystal, => new RR.Crystal @map, { x: @opts.x + rand(), y: @opts.y + rand() }
     @updateOpts()
-    if @mesh then @updateMesh()
+    @_refreshMesh()
     for i in [0, 1, 2, 3, 5, 6, 7, 8]
       b = @map.getBlock @opts.x - 1 + (i % 3), @opts.y - 1 + Math.floor(i / 3)
       if b isnt null and b.opts.type is 'wall'
@@ -190,15 +178,37 @@ class RTSBlock
           b.collapse true
         else
           b.updateOpts()
-          if b.mesh then b.updateMesh()
+          if b.mesh then b._refreshMesh()
   decreaseRubble: ->
     if @opts.rubble
       @opts.rubble -= 1
       @updateOpts()
-      @updateMesh()
+      @_refreshMesh()
       rand = -> 0.2 + (Math.random() * 0.6)
       new RR.Ore @map, { x: @opts.x + rand(), y: @opts.y + rand() }
       if @opts.rubble is 0 then RTSBlock.allWithRubble.remove @
+  notifyResource: (r) ->
+    if @powerpath is RTSBlock.PP_PLAN
+      if @fixme_firstOre
+        r.destroy()
+        @fixme_firstOre.destroy()
+        delete @fixme_firstOre
+        @powerpath = RTSBlock.PP_PATH
+        @_refreshMesh()
+      else
+        @fixme_firstOre = r
+    else if @building
+      NotImplemented()
+    else
+      assert false
+  demandPath: ->
+
+    @powerpath = RTSBlock.PP_PLAN
+    @_refreshMesh()
+
+    w = new RTS.Work { action: 'deposit-resource', block: @, ordered: true }
+    repeat 2, => @map.game.interface.demandResource 'Ore', w
+
   xyForDrillWall: ->
     adj = @getAdj [1, 3, 5, 7]
     if adj[0] is 'F'
@@ -243,7 +253,11 @@ RTSBlock.materials[53] = new THREE.MeshLambertMaterial { map: new THREE.ImageUti
 RTSBlock.materials[54] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE54.BMP' }
 RTSBlock.materials[55] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE55.BMP' }
 
+RTSBlock.materials[60] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE60.BMP' }
+RTSBlock.materials[61] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE61.BMP' }
+RTSBlock.materials[66] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE66.BMP' }
 RTSBlock.materials[70] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE70.BMP' }
+RTSBlock.materials[71] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE71.BMP' }
 RTSBlock.materials[76] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE76.BMP' }
 RTSBlock.materials[77] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE77.BMP' }
 

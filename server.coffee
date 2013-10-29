@@ -14,12 +14,12 @@ assman.register 'js', 'rock-raiders', [
 
   'game/init.coffee'
 
-  'game/base/block.coffee'
   'game/base/map.coffee'
   'game/base/object.coffee'
   'game/base/select.coffee'
   'game/base/work.coffee'
 
+  'game/base/block.coffee'
   'game/base/building.coffee'
   'game/base/resource.coffee'
   'game/base/unit.coffee'
