@@ -5,7 +5,7 @@ html
     script(type='text/javascript').
       window.LOG = function () {
         var el = document.createElement('div');
-        el.innerText = Array.prototype.join.call(arguments, ', ');
+        el.textContent = Array.prototype.join.call(arguments, ', ');
         document.querySelector('#log').appendChild(el, 0);
       };
     link(rel='stylesheet', type='text/css', href='/game.css')

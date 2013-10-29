@@ -11,7 +11,7 @@ class RTSBlock
     if @opts.hidden
       return
     else if @map.game.selected.pilot
-      if @opts.type is 'wall' and @opts.strength < 4
+      if @opts.type is 'wall' and @opts.strength < 3
         @map.game.selected.pilot.demandWork new RTS.Work { action: 'drill-wall', block: @ }
         @map.game.selected.clear()
         @map.game.interface.mainMenu()
@@ -28,7 +28,8 @@ class RTSBlock
         if (@opts.rubble || 0) > 0 then btns.push 'clear-rubble'
         if (@opts.rubble || 0) < 1 then btns.push 'build-path'
       if @opts.type is 'wall' and @opts.wallType in [1, 2]
-        if @opts.strength < 4 then btns.push 'drill-wall'
+        if @opts.strength < 3 then btns.push 'drill-wall'
+        if @opts.strength < 4 then btns.push 'blast-wall'
       if btns.length > 0
         @map.game.interface.setButtons btns, @
   getAdj: (num) =>

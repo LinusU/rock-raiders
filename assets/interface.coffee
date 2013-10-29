@@ -16,9 +16,9 @@ class RRInterface
     @text[0].className = 'rr-interface-mf'
     @text[1].className = 'rr-interface-ore'
     @text[2].className = 'rr-interface-crystal'
-    @text[0].innerText = ''
-    @text[1].innerText = 0
-    @text[2].innerText = 0
+    @text[0].textContent = ''
+    @text[1].textContent = '0'
+    @text[2].textContent = '0'
     @domElement.appendChild @text[0]
     @domElement.appendChild @text[1]
     @domElement.appendChild @text[2]
@@ -29,7 +29,7 @@ class RRInterface
         configurable: true
         get: -> val
         set: (newVal) =>
-          @text[0].innerText = (if newVal > 0 then newVal else '')
+          @text[0].textContent = (if newVal > 0 then newVal else '')
           val = parseInt newVal
     do =>
       val = 0
@@ -38,7 +38,7 @@ class RRInterface
         configurable: true
         get: -> val
         set: (newVal) =>
-          @text[1].innerText = newVal
+          @text[1].textContent = newVal
           val = parseInt newVal
     do =>
       val = 0
@@ -47,7 +47,7 @@ class RRInterface
         configurable: true
         get: -> val
         set: (newVal) =>
-          @text[2].innerText = newVal
+          @text[2].textContent = newVal
           val = parseInt newVal
     @mainMenu()
   addWork: (w) ->
@@ -57,6 +57,42 @@ class RRInterface
       @workQueue.deq()
     else
       null
+  showBriefingPanel: (title, pages, cb) ->
+    i = 0
+    click = =>
+      if ++i < pages.length
+        win.querySelector('.text').textContent = pages[i]
+      else
+        @domElement.removeChild win
+        cb null
+    win = document.createElement 'div'
+    win.className = 'rr-interface-briefing-panel'
+    win.innerHTML = """
+      <div class="title"></div>
+      <div class="text"></div>
+      <div class="btn-continue"></div>
+    """
+    win.addEventListener 'click', (e) -> e.stopPropagation()
+    win.querySelector('.title').textContent = title
+    win.querySelector('.text').textContent = pages[i]
+    win.querySelector('.btn-continue').addEventListener 'click', click, false
+    @domElement.appendChild win
+  showHelpWindow: (text, cb) ->
+    click = (val) =>
+      @domElement.removeChild win
+      cb null, val
+    win = document.createElement 'div'
+    win.className = 'rr-interface-help-window'
+    win.innerHTML = """
+      <div class="text"></div>
+      <div class="btn-continue"></div>
+      <div class="btn-close"></div>
+    """
+    win.addEventListener 'click', (e) -> e.stopPropagation()
+    win.querySelector('.text').textContent = text
+    win.querySelector('.btn-close').addEventListener 'click', (-> click false), false
+    win.querySelector('.btn-continue').addEventListener 'click', (-> click true), false
+    @domElement.appendChild win
   findWork: (pilot) ->
     for r in RTS.Resource.all
       if !(r.isPickedUpBy or r.predicted.isPickedUpBy)

@@ -39,6 +39,77 @@ html, body
   .rr-interface-crystal
     right 2px
     bottom 0
+  .rr-interface-briefing-panel
+    position absolute
+    top 100px
+    left 80px
+    width 475px
+    height 281px
+    background-image url(LegoRR0/Interface/BriefingPanel/BriefingPanel.bmp)
+    .title, .text
+      color #006600
+      line-height 130%
+      font-size 12pt
+      font-weight bold
+      text-shadow 0 0 6px #004400
+    .title
+      position absolute
+      top 34px
+      left 90px
+      right 64px
+      text-align center
+    .text
+      position absolute
+      overflow-y auto
+      top 64px
+      left 64px
+      width 350px
+      height 120px
+      padding 10px
+    .btn-continue
+      position absolute
+      top 214px
+      right 60px
+      width 22px
+      height 15px
+      background-image url(LegoRR0/Interface/MessagePanel/OKButton.bmp)
+      opacity .8
+      &:hover
+        opacity 1
+  .rr-interface-help-window
+    position absolute
+    top 45px
+    left 50px
+    width 539px
+    height 390px
+    background-image url(LegoRR0/Interface/HelpWindow/BIG-screen.bmp)
+    .text
+      position absolute
+      overflow-y auto
+      top 40px
+      left 60px
+      right 40px
+      bottom 80px
+    .btn-continue
+      position absolute
+      right 142px
+      bottom 33px
+      width 39px
+      height 33px
+      &:hover
+        background-image url(LegoRR0/Interface/HelpWindow/BScont_Hi.bmp)
+      &:active
+        background-image url(LegoRR0/Interface/HelpWindow/BScont_Push.bmp)
+    .btn-close
+      position absolute
+      right 102px
+      bottom 33px
+      width 39px
+      height 33px
+      &:hover
+        background-image url(LegoRR0/Interface/HelpWindow/BSclose_Hi.bmp)
+      &:active
+        background-image url(LegoRR0/Interface/HelpWindow/BSclose_Push.bmp)
   .rr-interface-buttons
     position absolute
     top 8px
@@ -95,6 +166,8 @@ html, body
     background-image url(LegoRR0/Interface/Menus/buildpath.bmp)
   .rr-btn-drill-wall
     background-image url(LegoRR0/Interface/Menus/drill.bmp)
+  .rr-btn-blast-wall
+    background-image url(LegoRR0/Interface/Menus/dynamite.bmp)
   .rr-btn-teleport-pilot
     background-image url(LegoRR0/Interface/Icons/minifigures.bmp)
   .rr-btn-menu-building
@@ -107,3 +180,5 @@ html, body
     background-image url(LegoRR0/Interface/Menus/MF_Pickup.bmp)
   .rr-btn-drop-object
     background-image url(LegoRR0/Interface/Menus/UnloadMinifigure.bmp)
+  .rr-btn-delete
+    background-image url(LegoRR0/Interface/Menus/delete.bmp)

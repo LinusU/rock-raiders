@@ -14,21 +14,26 @@ binaryRequest = (url, cb) ->
   xhr.onload = => cb null, new Uint8Array(xhr.response)
   xhr.send()
 
+textRequest = (url, cb) ->
+  xhr = new XMLHttpRequest
+  xhr.open "GET", url, true
+  xhr.onload = => cb null, xhr.responseText
+  xhr.send()
+
 class RTSMap
   constructor: (@game) ->
-    @lvl = '02'
-    binaryRequest "LegoRR0/Levels/GameLevels/Level#{@lvl}/Surf_#{@lvl}.map", (err, data) => @loadSurf data
+    @name =
+      long: 'Level02'
+      short: '02'
+    binaryRequest "LegoRR0/Levels/GameLevels/#{@name.long}/Surf_#{@name.short}.map", (err, data) => @loadSurf data
   fetchDugg: ->
-    binaryRequest "LegoRR0/Levels/GameLevels/Level#{@lvl}/Dugg_#{@lvl}.map", (err, data) => @loadDugg data
+    binaryRequest "LegoRR0/Levels/GameLevels/#{@name.long}/Dugg_#{@name.short}.map", (err, data) => @loadDugg data
   fetchCror: ->
-    binaryRequest "LegoRR0/Levels/GameLevels/Level#{@lvl}/Cror_#{@lvl}.map", (err, data) => @loadCror data
+    binaryRequest "LegoRR0/Levels/GameLevels/#{@name.long}/Cror_#{@name.short}.map", (err, data) => @loadCror data
   fetchOL: ->
-
-    xhr = new XMLHttpRequest
-    xhr.open "GET", "LegoRR0/Levels/GameLevels/Level#{@lvl}/#{@lvl}.ol", true
-    xhr.onload = => @loadOL xhr.responseText
-    xhr.send()
-
+    textRequest "LegoRR0/Levels/GameLevels/#{@name.long}/#{@name.short}.ol", (err, data) => @loadOL data
+  fetchStrings: ->
+    textRequest "LegoRR1/Languages/ObjectiveText.txt", (err, data) => @loadStrings data
   getBlock: (x, y) ->
     row = @blocks[y]
     if row is undefined
@@ -124,8 +129,24 @@ class RTSMap
         when 'SmallSpider', 'Pilot', 'Toolstation'
           objs[arguments[1]] = new RR[opts.type] @, opts
         else NotImplemented()
+    @fetchStrings()
+  loadStrings: (data) ->
+
+    r1 = /\[([A-Za-z0-9_]+)\]/
+    r2 = /([A-Za-z]+):[\t ]*(.*)/
+
+    mine = false
+    @strings = {}
+
+    for line in data.split '\n'
+      if (m = r1.exec line)
+        mine = (m[1] is @name.long)
+      if mine and (m = r2.exec line)
+        @strings[m[1]] = m[2]
+
     @loadFinish()
   loadFinish: ->
     @blocks.map (row) => row.map (block) => block.createMesh()
+    @game.interface.showBriefingPanel 'Mission Objective', @strings['Objective'].split('\\a'), ->
 
 window.RTS.Map = RTSMap
