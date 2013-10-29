@@ -1,6 +1,6 @@
 
 geometry = new THREE.SphereGeometry(1.2)
-material = new THREE.MeshLambertMaterial({ map: new THREE.ImageUtils.loadTexture 'texture/Ore.bmp' })
+material = new THREE.MeshLambertMaterial({ map: new THREE.ImageUtils.loadTexture 'LegoRR0/MiscAnims/Ore/Ore.bmp' })
 
 class RROre extends RTS.Resource
   name: -> 'Ore'

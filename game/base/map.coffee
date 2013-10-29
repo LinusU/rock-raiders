@@ -16,15 +16,15 @@ binaryRequest = (url, cb) ->
 
 class RTSMap
   constructor: (@game) ->
-    binaryRequest "levels/Level01/Surf_01.map", (err, data) => @loadSurf data
+    binaryRequest "LegoRR0/Levels/GameLevels/Level01/Surf_01.map", (err, data) => @loadSurf data
   fetchDugg: ->
-    binaryRequest "levels/Level01/Dugg_01.map", (err, data) => @loadDugg data
+    binaryRequest "LegoRR0/Levels/GameLevels/Level01/Dugg_01.map", (err, data) => @loadDugg data
   fetchCror: ->
-    binaryRequest "levels/Level01/Cror_01.map", (err, data) => @loadCror data
+    binaryRequest "LegoRR0/Levels/GameLevels/Level01/Cror_01.map", (err, data) => @loadCror data
   fetchOL: ->
 
     xhr = new XMLHttpRequest
-    xhr.open "GET", "levels/Level01/01.ol", true
+    xhr.open "GET", "LegoRR0/Levels/GameLevels/Level01/01.ol", true
     xhr.onload = => @loadOL xhr.responseText
     xhr.send()
 

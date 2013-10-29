@@ -37,8 +37,9 @@ assman.register 'js', 'rock-raiders', [
 app = express()
 app.use assman.middleware
 
-app.use '/levels', express.static __dirname + '/levels'
-app.use '/texture', express.static __dirname + '/texture'
+app.use '/LegoRR0', express.static __dirname + '/LinusRR'
+app.use '/LegoRR0', express.static __dirname + '/LegoRR0'
+app.use '/LegoRR1', express.static __dirname + '/LegoRR1'
 
 app.get '/', (req, res) ->
   res.redirect '/game.html'

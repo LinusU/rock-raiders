@@ -214,37 +214,37 @@ class RTSBlock
     target = @map.getBlock @opts.x + dx, @opts.y + dy
     return [target.opts.x * 10 + px, target.opts.y * 10 + py]
 
-RTSBlock.materials[0] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE00.BMP' }
-RTSBlock.materials[1] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE01.BMP' }
-RTSBlock.materials[2] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE02.BMP' }
-RTSBlock.materials[3] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE03.BMP' }
-RTSBlock.materials[4] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE04.BMP' }
-RTSBlock.materials[5] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE05.BMP' }
+RTSBlock.materials[0] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE00.BMP' }
+RTSBlock.materials[1] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE01.BMP' }
+RTSBlock.materials[2] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE02.BMP' }
+RTSBlock.materials[3] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE03.BMP' }
+RTSBlock.materials[4] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE04.BMP' }
+RTSBlock.materials[5] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE05.BMP' }
 
-RTSBlock.materials[10] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE10.BMP' }
-RTSBlock.materials[11] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE11.BMP' }
-RTSBlock.materials[12] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE12.BMP' }
-RTSBlock.materials[13] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE13.BMP' }
+RTSBlock.materials[10] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE10.BMP' }
+RTSBlock.materials[11] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE11.BMP' }
+RTSBlock.materials[12] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE12.BMP' }
+RTSBlock.materials[13] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE13.BMP' }
 
-RTSBlock.materials[31] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE31.BMP' }
-RTSBlock.materials[32] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE32.BMP' }
-RTSBlock.materials[33] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE33.BMP' }
-RTSBlock.materials[34] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE34.BMP' }
-RTSBlock.materials[35] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE35.BMP' }
+RTSBlock.materials[31] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE31.BMP' }
+RTSBlock.materials[32] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE32.BMP' }
+RTSBlock.materials[33] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE33.BMP' }
+RTSBlock.materials[34] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE34.BMP' }
+RTSBlock.materials[35] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE35.BMP' }
 
-RTSBlock.materials[45] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE45.BMP' }
-RTSBlock.materials[46] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE46.BMP' }
+RTSBlock.materials[45] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE45.BMP' }
+RTSBlock.materials[46] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE46.BMP' }
 
-RTSBlock.materials[51] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE51.BMP' }
-RTSBlock.materials[52] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE52.BMP' }
-RTSBlock.materials[53] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE53.BMP' }
-RTSBlock.materials[54] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE54.BMP' }
-RTSBlock.materials[55] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE55.BMP' }
+RTSBlock.materials[51] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE51.BMP' }
+RTSBlock.materials[52] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE52.BMP' }
+RTSBlock.materials[53] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE53.BMP' }
+RTSBlock.materials[54] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE54.BMP' }
+RTSBlock.materials[55] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE55.BMP' }
 
-RTSBlock.materials[70] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE70.BMP' }
-RTSBlock.materials[76] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICE76.BMP' }
-RTSBlock.materials[77] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICEXX.BMP' }
+RTSBlock.materials[70] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE70.BMP' }
+RTSBlock.materials[76] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE76.BMP' }
+RTSBlock.materials[77] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE77.BMP' }
 
-RTSBlock.materials.ROOF = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'texture/WorldTextures/ICEROOF.BMP' }
+RTSBlock.materials.ROOF = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/ICEROOF.BMP' }
 
 window.RTS.Block = RTSBlock
