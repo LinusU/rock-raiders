@@ -10,14 +10,16 @@ class RTSWork
       switch @action
         when 'drop-object'
           [@x, @y] = [null, null]
-        when 'drill-wall'
+        when 'drill-wall', 'blast-wall'
+          assert @block
           [@x, @y] = @block.xyForDrillWall()
         when 'clear-rubble', 'build-path', 'deposit-resource'
           assert @block
           [@x, @y] = [Math.round(@block.opts.x * 10 + rand()), Math.round(@block.opts.y * 10 + rand())]
         when 'pickup-object'
+          assert @obj
           [@x, @y] = [Math.round(@obj.opts.x * 10), Math.round(@obj.opts.y * 10)]
-        when 'store-object', 'withdraw-resource'
+        when 'store-object', 'withdraw-resource', 'fetch-dynamite'
           assert @building
           [@x, @y] = @building.xyForEntrance()
         else NotImplemented()
@@ -25,7 +27,7 @@ class RTSWork
     if @priority is undefined
       @priority = 5
       switch @action
-        when 'drill-wall' then 12
+        when 'drill-wall', 'blast-wall', 'fetch-dynamite' then 12
         when 'clear-rubble' then 6
         when 'pickup-object' then 8
         when 'store-object' then 9

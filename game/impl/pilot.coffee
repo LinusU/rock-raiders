@@ -96,6 +96,21 @@ class RRPilot extends RTS.Unit
           @pickupObject obj
           done()
         ), 320
+      when 'fetch-dynamite'
+        @busy = true
+        setTimeout (=>
+          obj = new RR.Dynamite @map, { x: @opts.x, y: @opts.y }
+          @pickupObject obj
+          done()
+        ), 320
+      when 'blast-wall'
+        @busy = true
+        setTimeout (=>
+          assert @carryingObject.name() is 'Dynamite'
+          @carryingObject.lightFuse @work.block
+          @dropObject()
+          done()
+        ), 160
   click: ->
     btns = []
     if @carryingObject then btns.push 'drop-object'
@@ -104,8 +119,10 @@ class RRPilot extends RTS.Unit
     @map.game.interface.setButtons btns, @
   canDoWork: (w) ->
     switch w.action
-      when 'drill-wall', 'clear-rubble', 'pickup-object'
+      when 'drill-wall', 'clear-rubble', 'pickup-object', 'fetch-dynamite'
         (@carryingObject is null) and (@canWalkTo w.x, w.y)
+      when 'blast-wall'
+        (@carryingObject.name() is 'Dynamite') and (@canWalkTo w.x, w.y)
       when 'deposit-resource'
         @canWalkTo w.x, w.y
       when 'store-object'

@@ -12,6 +12,15 @@ class RTSBlock extends RTS.Object
     super
     @resources = { ore: 0, crystal: 0 }
     @powerpath = RTSBlock.PP_NONE
+  canWalkTo: (tx, ty) ->
+    switch @opts.type
+      when 'wall'
+        [fx, fy] = @xyForDrillWall()
+      when 'floor'
+        fx = Math.round(@opts.x * 10) + 5
+        fy = Math.round(@opts.y * 10) + 5
+      else NotImplemented()
+    @map.getWalkPath(fx, fy, tx, ty).length > 0
   click: (point) ->
     if @opts.hidden
       return

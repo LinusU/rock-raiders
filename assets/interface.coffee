@@ -141,7 +141,13 @@ class RRInterface
   runAction: (action, ctx) ->
     switch action
       when 'drill-wall' then @addWork new RTS.Work { action: action, block: ctx, ordered: true }
-      when 'clear-rubble' then [0..3].map => @addWork new RTS.Work { action: action, block: ctx, ordered: true }
+      when 'blast-wall'
+        ts = ctx.findToolstation()
+        if ts isnt null
+          w = new RTS.Work { action: 'fetch-dynamite', building: ts }
+          w.nextWork = new RTS.Work { action: 'blast-wall', block: ctx }
+          @addWork w
+      when 'clear-rubble' then repeat 4, => @addWork new RTS.Work { action: action, block: ctx, ordered: true }
       when 'build-path' then ctx.demandPath()
       when 'pickup-object' then @addWork new RTS.Work { action: action, obj: ctx, ordered: true }
       when 'teleport-pilot' then @mfQueue++
