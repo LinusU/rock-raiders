@@ -1,6 +1,4 @@
 
-VZ = new THREE.Vector3(0, 0, 1)
-
 class RTSObject
   constructor: (@map, @opts) ->
     @predicted = {}
@@ -16,7 +14,7 @@ class RTSObject
     if @_noMesh then return
 
     @mesh = new THREE.Mesh @geometry(), @material()
-    @mesh.rotateOnAxis VZ, (Math.PI / 180) * (@opts.heading || 0)
+    @mesh.rotation.z = (Math.PI / 180) * (@opts.heading || 0)
 
     if @ instanceof RTS.Block
       @mesh.position.set @opts.x * 10 + 5, @opts.y * 10 + 5, 0
