@@ -31,6 +31,7 @@ assman.register 'js', 'rock-raiders', [
   'game/impl/dynamite.coffee'
   'game/impl/ore.coffee'
   'game/impl/pilot.coffee'
+  'game/impl/small-digger.coffee'
   'game/impl/small-spider.coffee'
   'game/impl/toolstation.coffee'
 

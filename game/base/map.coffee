@@ -129,7 +129,7 @@ class RTSMap
       switch opts.type
         when 'TVCamera'
           @game.setCameraPos opts.x, opts.y
-        when 'SmallSpider', 'Pilot', 'Toolstation'
+        when 'SmallSpider', 'Pilot', 'Toolstation', 'SmallDigger'
           objs[arguments[1]] = new RR[opts.type] @, opts
         else NotImplemented()
     @fetchStrings()
