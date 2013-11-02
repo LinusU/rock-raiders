@@ -123,7 +123,10 @@ class RTSBlock extends RTS.Object
           when 1 then RTSBlock.materials[61]
           when 2 then RTSBlock.materials[60]
       when 'wall'
-        switch @opts.wallType
+        if @seam then switch @seam
+          when 'ore' then RTSBlock.materials[40]
+          when 'crystal' then RTSBlock.materials[20]
+        else switch @opts.wallType
           when 1 then RTSBlock.materials[ 1 + @opts.strength]
           when 2 then RTSBlock.materials[51 + @opts.strength]
           when 3 then RTSBlock.materials[31 + @opts.strength]
@@ -255,11 +258,15 @@ RTSBlock.materials[11] = new THREE.MeshLambertMaterial { map: new THREE.ImageUti
 RTSBlock.materials[12] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE12.BMP' }
 RTSBlock.materials[13] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE13.BMP' }
 
+RTSBlock.materials[20] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE20.BMP' }
+
 RTSBlock.materials[31] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE31.BMP' }
 RTSBlock.materials[32] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE32.BMP' }
 RTSBlock.materials[33] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE33.BMP' }
 RTSBlock.materials[34] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE34.BMP' }
 RTSBlock.materials[35] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE35.BMP' }
+
+RTSBlock.materials[40] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE40.BMP' }
 
 RTSBlock.materials[45] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE45.BMP' }
 RTSBlock.materials[46] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE46.BMP' }

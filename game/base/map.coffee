@@ -68,8 +68,10 @@ class RTSMap
           new RTS.Block @, { x: x, y: y, type: 'lava' }
         when 9
           new RTS.Block @, { x: x, y: y, type: 'water' }
-        # 08 Ore Seam
-        # 0A Energy Crystal Seam
+        when 8
+          new RTS.Block @, { x: x, y: y, type: 'wall', strength: 1, stock: 4, seam: 'ore' }
+        when 10
+          new RTS.Block @, { x: x, y: y, type: 'wall', strength: 1, stock: 4, seam: 'crystal' }
         # 0B Recharge Seam
         else NotImplemented()
 
