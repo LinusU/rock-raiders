@@ -30,7 +30,7 @@ class RRToolstation extends RTS.Building
       obj = new RR.Pilot @map, { x: @opts.x, y: @opts.y, heading: @opts.heading }
       obj.walkTo tx, ty
       obj.idle = 50
-      setTimeout (=> @busy = false; @mainLoop()), 1000
+      setTimeout (=> @busy = false; @mainLoop()), 2500
     else
       setTimeout (=> @mainLoop()), 330
   destroy: ->
