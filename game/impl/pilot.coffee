@@ -106,8 +106,10 @@ class RRPilot extends RTS.Unit
       when 'withdraw-resource'
         @busy = true
         setTimeout (=>
-          assert @work.type is 'ore'
-          obj = new RR.Ore @map, { x: @opts.x, y: @opts.y }
+          obj = switch @work.type
+            when 'ore' then new RR.Ore @map, { x: @opts.x, y: @opts.y }
+            when 'crystal' then new RR.Crystal @map, { x: @opts.x, y: @opts.y }
+            else NotImplemented()
           @pickupObject obj
           done()
         ), 320

@@ -17,7 +17,7 @@ class RRToolstation extends RTS.Building
   _refreshMesh: ->
     super
 
-    @mesh.rotation.z = -Math.PI / 2
+    @mesh.rotation.z = -(@opts.heading / 180 * Math.PI)
 
   mainLoop: ->
     if @busy or @block.opts.hidden
