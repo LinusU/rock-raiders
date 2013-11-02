@@ -16,11 +16,15 @@ class GAudio
         @effects[name].buffer = buffer
     xhr.send()
   playEffect: (name, _loop = false) ->
-    src = @ctx.createBufferSource()
-    src.loop = _loop
-    src.buffer = @effects[name].buffer
-    src.connect @ctx.destination
-    src.start 0
-    return { stop: -> src.stop 0 }
+    if @effects[name].buffer
+      src = @ctx.createBufferSource()
+      src.loop = _loop
+      src.buffer = @effects[name].buffer
+      src.connect @ctx.destination
+      src.start 0
+      return { stop: -> src.stop 0 }
+    else
+      # FIXME
+      return { stop: -> }
 
 window.GAudio = new GAudio
