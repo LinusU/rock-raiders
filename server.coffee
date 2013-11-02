@@ -12,6 +12,8 @@ assman.register 'js', 'rock-raiders', [
   'vendor/pathfinding-browser.min.js'
   'vendor/priorityqueue.min.js'
 
+  'assets/audio.coffee'
+
   'game/init.coffee'
 
   'game/base/map.coffee'

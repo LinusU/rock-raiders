@@ -1,6 +1,8 @@
 
 VZ = new THREE.Vector3(0, 0, 1)
 
+GAudio.registerEffect 'rock-break', 'LegoRR0/Sounds/ROKBREK1.WAV'
+
 class RTSBlock extends RTS.Object
   @PP_NONE: 0
   @PP_PLAN: 1
@@ -170,6 +172,9 @@ class RTSBlock extends RTS.Object
     return geo
 
   collapse: (noRubble = false) ->
+    # FIXME
+    unless noRubble
+      GAudio.playEffect 'rock-break'
     @opts.type = 'floor'
     @opts.rubble = (if noRubble then 0 else 4)
     if @opts.rubble > 0 then RTSBlock.allWithRubble.push @

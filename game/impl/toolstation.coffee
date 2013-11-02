@@ -2,6 +2,8 @@
 geometry = new THREE.CubeGeometry(8, 8, 1)
 material = new THREE.MeshLambertMaterial({ color: 0x00aa00 })
 
+GAudio.registerEffect 'teleport', 'LegoRR0/Sounds/Teleport.wav'
+
 class RRToolstation extends RTS.Building
   @all: []
   geometry: -> geometry
@@ -18,6 +20,7 @@ class RRToolstation extends RTS.Building
     else if @map.game.interface.mfQueue > 0
       @busy = true
       @map.game.interface.mfQueue--
+      GAudio.playEffect 'teleport'
       [tx, ty] = @xyForEntrance()
       obj = new RR.Pilot @map, { x: @opts.x, y: @opts.y, heading: @opts.heading }
       obj.walkTo tx, ty

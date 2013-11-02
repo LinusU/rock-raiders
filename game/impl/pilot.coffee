@@ -2,6 +2,11 @@
 geometry = new THREE.CubeGeometry(1, 2, 8)
 material = new THREE.MeshLambertMaterial({ color: 0xaa0000 })
 
+GAudio.registerEffect 'pilot-dig', 'LegoRR0/Sounds/Minifigure/dig.wav'
+GAudio.registerEffect 'pilot-drill', 'LegoRR0/Sounds/Minifigure/Pdrill.wav'
+GAudio.registerEffect 'pilot-drop-ore', 'LegoRR0/Sounds/Minifigure/Rockdrop.wav'
+GAudio.registerEffect 'pilot-drop-crystal', 'LegoRR0/Sounds/Minifigure/Crystaldrop.wav'
+
 class RRPilot extends RTS.Unit
   geometry: -> geometry
   material: -> material
@@ -47,13 +52,17 @@ class RRPilot extends RTS.Unit
     switch @work.action
       when 'drill-wall'
         @busy = true
+        snd = GAudio.playEffect 'pilot-drill', true
         setTimeout =>
+          snd.stop()
           @work.block.collapse()
           done()
         , 2000
       when 'clear-rubble'
         @busy = true
+        snd = GAudio.playEffect 'pilot-dig', true
         setTimeout (=>
+          snd.stop()
           @work.block.decreaseRubble()
           done()
         ), 1000
@@ -65,12 +74,16 @@ class RRPilot extends RTS.Unit
         ), 320
       when 'drop-object'
         @busy = true
+        if @work.obj.name() is 'Ore' then GAudio.playEffect 'pilot-drop-ore'
+        if @work.obj.name() is 'Crystal' then GAudio.playEffect 'pilot-drop-crystal'
         setTimeout (=>
           @dropObject()
           done()
         ), 160
       when 'store-object'
         @busy = true
+        if @work.obj.name() is 'Ore' then GAudio.playEffect 'pilot-drop-ore'
+        if @work.obj.name() is 'Crystal' then GAudio.playEffect 'pilot-drop-crystal'
         setTimeout (=>
           assert @carryingObject is @work.obj
           @dropObject()
@@ -81,8 +94,10 @@ class RRPilot extends RTS.Unit
         ), 160
       when 'deposit-resource'
         @busy = true
+        obj = @carryingObject
+        if obj.name() is 'Ore' then GAudio.playEffect 'pilot-drop-ore'
+        if obj.name() is 'Crystal' then GAudio.playEffect 'pilot-drop-crystal'
         setTimeout (=>
-          obj = @carryingObject
           @dropObject()
           obj.belongsToBuilding = true
           @work.block.notifyResource obj
