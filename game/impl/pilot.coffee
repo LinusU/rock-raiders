@@ -1,5 +1,5 @@
 
-geometry = new THREE.CubeGeometry(2, 1, 8)
+geometry = new THREE.CubeGeometry(1, 2, 8)
 material = new THREE.MeshLambertMaterial({ color: 0xaa0000 })
 
 class RRPilot extends RTS.Unit
@@ -26,11 +26,11 @@ class RRPilot extends RTS.Unit
         else
           @map.game.interface.addWork w
     if @work is null
-      if @idle++ > 30 + (Math.random() * 30)
-        @idle = 0
+      if @idle-- is 0
+        @idle = Math.round(Math.random() * 10)
         @work = @map.game.interface.findWork @
     if @work
-      @idle = 0
+      @idle = Math.round(Math.random() * 10)
       if (@work.x is @work.y is null) or @opts.x * 10 is @work.x and @opts.y * 10 is @work.y
         @executeWork cb
       else
