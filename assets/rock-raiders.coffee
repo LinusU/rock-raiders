@@ -93,6 +93,8 @@ class RockRaiders
     dt = Date.now() - @lastRender
     @lastRender = Date.now()
 
+    RTS.Unit.walking.forEach (fn) -> fn dt
+
     @camera.move Key.relX() * (dt / 20), Key.relY() * (dt / 20)
     @render()
 

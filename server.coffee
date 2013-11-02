@@ -16,6 +16,7 @@ assman.register 'js', 'rock-raiders', [
 
   'game/base/map.coffee'
   'game/base/object.coffee'
+  'game/base/path.coffee'
   'game/base/select.coffee'
   'game/base/work.coffee'
 

@@ -25,7 +25,7 @@ class RTSObject
     @map.game.scene.add @mesh
 
   canWalkTo: (tx, ty) ->
-    @map.getWalkPath(Math.round(@opts.x * 10), Math.round(@opts.y * 10), tx, ty).length > 0
+    @map.getWalkPath(Math.round(@opts.x * 10), Math.round(@opts.y * 10), tx, ty) isnt null
   deltaXY: ->
     switch Math.round(@opts.heading)
       when 0 then [0, -1]

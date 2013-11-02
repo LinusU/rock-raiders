@@ -44,7 +44,8 @@ class RTSMap
     return block
 
   getWalkPath: (x1, y1, x2, y2) ->
-    @finder.findPath x1, y1, x2, y2, @grid.clone()
+    points = @finder.findPath x1, y1, x2, y2, @grid.clone()
+    if points.length > 0 then new RTS.Path(@, points) else null
   loadSurf: (data) ->
 
     @width = data[8]

@@ -20,7 +20,7 @@ class RTSBlock extends RTS.Object
         fx = Math.round(@opts.x * 10) + 5
         fy = Math.round(@opts.y * 10) + 5
       else NotImplemented()
-    @map.getWalkPath(fx, fy, tx, ty).length > 0
+    @map.getWalkPath(fx, fy, tx, ty) isnt null
   click: (point) ->
     if @opts.hidden
       return
