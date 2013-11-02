@@ -32,9 +32,8 @@ class Camera
     @camera.lookAt new THREE.Vector3 0, 0, 0
     @camera.rotateOnAxis new THREE.Vector3(0, 0, 1), (Math.PI / 180) * 120
 
-    @light = new THREE.DirectionalLight 0xffffff
-
-    @light.position.set @distance, @distance, 30
+    @light = new THREE.PointLight 0xffffff, 1, @distance * 2
+    @light.position.set @distance / 2, @distance / 2, 30
     @game.scene.add @light
 
   move: (dx, dy) ->
@@ -48,8 +47,10 @@ class Camera
     @light.position.y += _dy
 
   moveTo: (x, y) ->
-    @camera.position.x = @light.position.x = x + @distance
-    @camera.position.y = @light.position.y = y + @distance
+    @light.position.x = x + @distance / 2
+    @light.position.y = y + @distance / 2
+    @camera.position.x = x + @distance
+    @camera.position.y = y + @distance
 
 class RockRaiders
   constructor: (@div) ->
@@ -66,7 +67,7 @@ class RockRaiders
     @interface = new RRInterface @
     @div.appendChild @interface.domElement
 
-    @light = new THREE.AmbientLight 0x606060
+    @light = new THREE.AmbientLight 0x505050
     @scene.add @light
 
     @camera = new Camera @

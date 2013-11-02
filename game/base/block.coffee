@@ -154,8 +154,10 @@ class RTSBlock extends RTS.Object
     geo.vertices.push new THREE.Vector3 -5,  5, zs[2] * 10
     geo.vertices.push new THREE.Vector3  5,  5, zs[3] * 10
 
-    geo.faces.push new THREE.Face3 0, 1, 2
-    geo.faces.push new THREE.Face3 1, 3, 2
+    normal = new THREE.Vector3( 0, 0, 1 )
+
+    geo.faces.push new THREE.Face3 0, 1, 2, normal
+    geo.faces.push new THREE.Face3 1, 3, 2, normal
 
     geo.faceVertexUvs[0].push [
       new THREE.Vector2 0, 0
