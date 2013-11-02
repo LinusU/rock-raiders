@@ -175,17 +175,18 @@ class RTSBlock extends RTS.Object
     # FIXME
     unless noRubble
       GAudio.playEffect 'rock-break'
-    @opts.type = 'floor'
-    @opts.rubble = (if noRubble then 0 else 4)
-    if @opts.rubble > 0 then RTSBlock.allWithRubble.push @
-    rand = -> 0.2 + (Math.random() * 0.6)
-    repeat @resources.ore, => new RR.Ore @map, { x: @opts.x + rand(), y: @opts.y + rand() }
-    repeat @resources.crystal, => new RR.Crystal @map, { x: @opts.x + rand(), y: @opts.y + rand() }
-    @updateOpts()
+    if @opts.type is 'wall'
+      @opts.type = 'floor'
+      @opts.rubble = (if noRubble then 0 else 4)
+      if @opts.rubble > 0 then RTSBlock.allWithRubble.push @
+      rand = -> 0.2 + (Math.random() * 0.6)
+      repeat @resources.ore, => new RR.Ore @map, { x: @opts.x + rand(), y: @opts.y + rand() }
+      repeat @resources.crystal, => new RR.Crystal @map, { x: @opts.x + rand(), y: @opts.y + rand() }
+      @updateOpts()
     @_refreshMesh()
     for i in [0, 1, 2, 3, 5, 6, 7, 8]
       b = @map.getBlock @opts.x - 1 + (i % 3), @opts.y - 1 + Math.floor(i / 3)
-      if b isnt null and b.opts.type is 'wall'
+      if b isnt null and (b.opts.type is 'wall' or b.partOfHiddenCavern)
         if b.partOfHiddenCavern
           delete b.partOfHiddenCavern
           b.opts.hidden = false
