@@ -92,11 +92,8 @@ class RRPilot extends RTS.Unit
         obj = switch @work.type
           when 'ore' then new RR.Ore @map, { x: @opts.x, y: @opts.y }
           when 'crystal' then new RR.Crystal @map, { x: @opts.x, y: @opts.y }
+          when 'dynamite' then new RR.Dynamite @map, { x: @opts.x, y: @opts.y }
           else NotImplemented()
-        @pickupObject obj, -> done()
-      when 'fetch-dynamite'
-        @busy = true
-        obj = new RR.Dynamite @map, { x: @opts.x, y: @opts.y }
         @pickupObject obj, -> done()
       when 'blast-wall'
         assert @carryingObject.name() is 'Dynamite'
@@ -112,7 +109,7 @@ class RRPilot extends RTS.Unit
     @map.game.interface.setButtons btns, @
   canDoWork: (w) ->
     switch w.action
-      when 'drill-wall', 'clear-rubble', 'pickup-object', 'fetch-dynamite'
+      when 'drill-wall', 'clear-rubble', 'pickup-object', 'withdraw-resource'
         (@carryingObject is null) and (@canWalkTo w.x, w.y)
       when 'blast-wall'
         (@carryingObject.name() is 'Dynamite') and (@canWalkTo w.x, w.y)

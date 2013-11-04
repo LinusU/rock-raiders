@@ -144,7 +144,7 @@ class RRInterface
       when 'blast-wall'
         ts = ctx.findToolstation()
         if ts isnt null
-          w = new RTS.Work { action: 'fetch-dynamite', building: ts }
+          w = new RTS.Work { action: 'withdraw-resource', type: 'dynamite', building: ts }
           w.nextWork = new RTS.Work { action: 'blast-wall', block: ctx }
           @addWork w
       when 'clear-rubble' then repeat 4, => @addWork new RTS.Work { action: action, block: ctx, ordered: true }
