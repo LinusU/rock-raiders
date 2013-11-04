@@ -68,66 +68,42 @@ class RRPilot extends RTS.Unit
         ), 1000
       when 'pickup-object'
         @busy = true
-        setTimeout (=>
-          @pickupObject @work.obj
-          done()
-        ), 320
+        @pickupObject @work.obj, -> done()
       when 'drop-object'
         @busy = true
-        if @work.obj.name() is 'Ore' then GAudio.playEffect 'pilot-drop-ore'
-        if @work.obj.name() is 'Crystal' then GAudio.playEffect 'pilot-drop-crystal'
-        setTimeout (=>
-          @dropObject()
-          done()
-        ), 160
+        assert @carryingObject is @work.obj
+        @dropObject -> done()
       when 'store-object'
         @busy = true
-        if @work.obj.name() is 'Ore' then GAudio.playEffect 'pilot-drop-ore'
-        if @work.obj.name() is 'Crystal' then GAudio.playEffect 'pilot-drop-crystal'
-        setTimeout (=>
-          assert @carryingObject is @work.obj
-          @dropObject()
-          @work.obj.destroy()
-          if @work.obj.name() is 'Ore' then @map.game.interface.ore++
-          if @work.obj.name() is 'Crystal' then @map.game.interface.crystal++
+        assert @carryingObject is @work.obj
+        @dropObject (obj) =>
+          obj.destroy()
+          if obj.name() is 'Ore' then @map.game.interface.ore++
+          if obj.name() is 'Crystal' then @map.game.interface.crystal++
           done()
-        ), 160
       when 'deposit-resource'
         @busy = true
-        obj = @carryingObject
-        if obj.name() is 'Ore' then GAudio.playEffect 'pilot-drop-ore'
-        if obj.name() is 'Crystal' then GAudio.playEffect 'pilot-drop-crystal'
-        setTimeout (=>
-          @dropObject()
+        @dropObject (obj) =>
           obj.belongsToBuilding = true
           @work.block.notifyResource obj
           done()
-        ), 160
       when 'withdraw-resource'
         @busy = true
-        setTimeout (=>
-          obj = switch @work.type
-            when 'ore' then new RR.Ore @map, { x: @opts.x, y: @opts.y }
-            when 'crystal' then new RR.Crystal @map, { x: @opts.x, y: @opts.y }
-            else NotImplemented()
-          @pickupObject obj
-          done()
-        ), 320
+        obj = switch @work.type
+          when 'ore' then new RR.Ore @map, { x: @opts.x, y: @opts.y }
+          when 'crystal' then new RR.Crystal @map, { x: @opts.x, y: @opts.y }
+          else NotImplemented()
+        @pickupObject obj, -> done()
       when 'fetch-dynamite'
         @busy = true
-        setTimeout (=>
-          obj = new RR.Dynamite @map, { x: @opts.x, y: @opts.y }
-          @pickupObject obj
-          done()
-        ), 320
+        obj = new RR.Dynamite @map, { x: @opts.x, y: @opts.y }
+        @pickupObject obj, -> done()
       when 'blast-wall'
+        assert @carryingObject.name() is 'Dynamite'
         @busy = true
-        setTimeout (=>
-          assert @carryingObject.name() is 'Dynamite'
-          @carryingObject.lightFuse @work.block
-          @dropObject()
+        @dropObject (obj) =>
+          obj.lightFuse @work.block
           done()
-        ), 160
   click: ->
     btns = []
     if @carryingObject then btns.push 'drop-object'
@@ -151,17 +127,35 @@ class RRPilot extends RTS.Unit
           if ts then w.setBuilding ts
           (ts isnt null)
       else false
-  pickupObject: (obj) ->
+  pickupObject: (obj, cb) ->
     assert @carryingObject is null
-    @carryingObject = obj
-    obj.isPickedUpBy = @
-    obj.mesh.position.set obj.opts.x * 10, obj.opts.y * 10, 4
-  dropObject: ->
+    pos = 0
+    ani = new RTS.Animation
+    ani.tick = (dt) =>
+      pos = Math.min 320, pos + dt
+      obj.mesh.position.z = (pos / 320) * 4
+      if pos is 320 then done()
+    done = =>
+      @carryingObject = obj
+      obj.isPickedUpBy = @
+      ani.destroy()
+      cb()
+  dropObject: (cb) ->
     assert @carryingObject
     obj = @carryingObject
-    delete obj.isPickedUpBy
-    obj.mesh.position.set obj.opts.x * 10, obj.opts.y * 10, 0
-    @carryingObject = null
+    pos = 0
+    ani = new RTS.Animation
+    ani.tick = (dt) ->
+      pos = Math.min 160, pos + dt
+      obj.mesh.position.z = 4 - (pos / 160 * 4)
+      if pos is 160 then done()
+    done = =>
+      if obj.name() is 'Ore' then GAudio.playEffect 'pilot-drop-ore'
+      if obj.name() is 'Crystal' then GAudio.playEffect 'pilot-drop-crystal'
+      delete obj.isPickedUpBy
+      @carryingObject = null
+      ani.destroy()
+      cb obj
   storeCurrentObject: ->
     assert @carryingObject
     ts = @findToolstation()

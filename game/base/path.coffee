@@ -6,6 +6,15 @@ class RTSPath
     @max = (@points.length - 1)
     @heading = 0
     [@x, @y] = @points[0]
+  animate: (unit, cb) ->
+    anim = new RTS.Animation
+    abort = ->
+      anim.destroy()
+      if cb then cb()
+    anim.tick = (dt) =>
+      @walk dt
+      unit.setPosFromPath @
+      if @isDone() then abort()
   isDone: ->
     (@pos >= @max)
   walk: (dt) ->

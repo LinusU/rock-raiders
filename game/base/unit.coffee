@@ -1,11 +1,6 @@
 
 class RTSUnit extends RTS.Object
-  @walking: []
-  walkTo: (tx, ty, cb) ->
-
-    path = @map.getWalkPath Math.round(@opts.x * 10), Math.round(@opts.y * 10), tx, ty
-    return false if path is null
-
+  setPosFromPath: (path) ->
     moveObj = (obj) ->
       obj.opts.x = path.x / 10
       obj.opts.y = path.y / 10
@@ -14,21 +9,21 @@ class RTSUnit extends RTS.Object
       obj.mesh.position.y = path.y
       obj.mesh.rotation.z = path.heading
 
-    tick = (dt) =>
+    moveObj @
 
-      path.walk dt
-      moveObj @
+    if @carryingObject
+      moveObj @carryingObject
 
-      if @carryingObject
-        moveObj @carryingObject
+  walkTo: (tx, ty, cb) ->
 
-      if path.isDone()
-        @busy = false
-        RTSUnit.walking.remove tick
-        if cb then do cb
+    path = @map.getWalkPath Math.round(@opts.x * 10), Math.round(@opts.y * 10), tx, ty
+    return false if path is null
+
+    path.animate @, =>
+      @busy = false
+      if cb then do cb
 
     @busy = true
-    RTSUnit.walking.push tick
     return true
 
 window.RTS.Unit = RTSUnit

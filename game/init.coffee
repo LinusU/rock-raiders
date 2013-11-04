@@ -26,8 +26,17 @@ class NotImplementedError extends Error
     @name = 'NotImplementedError'
     @message = e.message
 
+class AbstractMethodError extends Error
+  constructor: ->
+    e = super
+    @name = 'AbstractMethodError'
+    @message = e.message
+
 window.NotImplemented = (msg) ->
   throw new NotImplementedError msg
+
+window.AbstractMethod = (msg) ->
+  throw new AbstractMethodError msg
 
 window.assert = (ok) ->
   throw new AssertionError('assertion failed') unless ok
