@@ -13,6 +13,7 @@ assman.register 'js', 'rock-raiders', [
   'vendor/priorityqueue.min.js'
 
   'assets/audio.coffee'
+  'assets/cfg-parser.coffee'
 
   'game/init.coffee'
 
