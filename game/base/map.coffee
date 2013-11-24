@@ -23,8 +23,8 @@ textRequest = (url, cb) ->
 class RTSMap
   constructor: (@game) ->
     @name =
-      long: 'Level02'
-      short: '02'
+      long: 'Level04'
+      short: '04'
     binaryRequest "LegoRR0/Levels/GameLevels/#{@name.long}/Surf_#{@name.short}.map", (err, data) => @loadSurf data
   fetchDugg: ->
     binaryRequest "LegoRR0/Levels/GameLevels/#{@name.long}/Dugg_#{@name.short}.map", (err, data) => @loadDugg data
