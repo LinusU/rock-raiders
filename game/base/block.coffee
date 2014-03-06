@@ -126,6 +126,7 @@ class RTSBlock extends RTS.Object
         if @seam then switch @seam
           when 'ore' then RTSBlock.materials[40]
           when 'crystal' then RTSBlock.materials[20]
+          when 'recharge' then RTSBlock.materials[67]
         else switch @opts.wallType
           when 1 then RTSBlock.materials[ 1 + @opts.strength]
           when 2 then RTSBlock.materials[51 + @opts.strength]
@@ -280,6 +281,7 @@ RTSBlock.materials[55] = new THREE.MeshLambertMaterial { map: new THREE.ImageUti
 RTSBlock.materials[60] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE60.BMP' }
 RTSBlock.materials[61] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE61.BMP' }
 RTSBlock.materials[66] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE66.BMP' }
+RTSBlock.materials[67] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE67.BMP' }
 RTSBlock.materials[70] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE70.BMP' }
 RTSBlock.materials[71] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE71.BMP' }
 RTSBlock.materials[76] = new THREE.MeshLambertMaterial { map: new THREE.ImageUtils.loadTexture 'LegoRR0/World/WorldTextures/IceSplit/ICE76.BMP' }

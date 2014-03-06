@@ -72,7 +72,8 @@ class RTSMap
           new RTS.Block @, { x: x, y: y, type: 'wall', strength: 1, stock: 4, seam: 'ore' }
         when 10
           new RTS.Block @, { x: x, y: y, type: 'wall', strength: 1, stock: 4, seam: 'crystal' }
-        # 0B Recharge Seam
+        when 11
+          new RTS.Block @, { x: x, y: y, type: 'wall', strength: 4, seam: 'recharge' }
         else NotImplemented()
 
     @fetchDugg()
@@ -129,9 +130,22 @@ class RTSMap
       switch opts.type
         when 'TVCamera'
           @game.setCameraPos opts.x, opts.y
+        when 'PowerCrystal'
+          objs[arguments[1]] = new RR.Crystal @, opts
         when 'SmallSpider', 'Pilot', 'Toolstation', 'SmallDigger'
           objs[arguments[1]] = new RR[opts.type] @, opts
-        else NotImplemented()
+        when 'SmallTruck'
+          # FIXME: Transport Truck
+          NotImplemented()
+        when 'Upgrade'
+          # FIXME: Upgrade Station
+          NotImplemented()
+        when 'Powerstation'
+          # FIXME: Power Station
+          NotImplemented()
+        else
+          LOG 'Not implemented item: ' + opts.type
+          NotImplemented()
     @fetchStrings()
   loadStrings: (data) ->
 
@@ -151,6 +165,6 @@ class RTSMap
   loadFinish: ->
     # MAYBE @blocks.map (row) => row.map (block) => block.updateOpts()
     @blocks.map (row) => row.map (block) => block.refreshMesh()
-    # @game.interface.showBriefingPanel 'Mission Objective', @strings['Objective'].split('\\a'), ->
+    @game.interface.showBriefingPanel 'Mission Objective', @strings['Objective'].split('\\a'), ->
 
 window.RTS.Map = RTSMap
