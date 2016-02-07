@@ -1,6 +1,7 @@
 
-geometry = new THREE.CubeGeometry(1, 2, 8)
-material = new THREE.MeshLambertMaterial({ map: new THREE.ImageUtils.loadTexture 'LegoRR0/Mini-Figures/Pilot/Pback.bmp' })
+loader = new THREE.TextureLoader
+geometry = new THREE.BoxGeometry(1, 2, 8)
+material = new THREE.MeshLambertMaterial({ map: loader.load 'LegoRR0/Mini-Figures/Pilot/Pback.bmp' })
 
 GAudio.registerEffect 'pilot-dig', 'LegoRR0/Sounds/Minifigure/dig.wav'
 GAudio.registerEffect 'pilot-drill', 'LegoRR0/Sounds/Minifigure/Pdrill.wav'

@@ -1,6 +1,7 @@
 
-geometry = new THREE.CubeGeometry(8, 8, 1)
-material = new THREE.MeshLambertMaterial({ map: new THREE.ImageUtils.loadTexture 'LegoRR0/Buildings/ToolStation/MAINtopOLD.bmp' })
+loader = new THREE.TextureLoader
+geometry = new THREE.BoxGeometry(8, 8, 1)
+material = new THREE.MeshLambertMaterial({ map: loader.load 'LegoRR0/Buildings/ToolStation/MAINtopOLD.bmp' })
 
 GAudio.registerEffect 'teleport', 'LegoRR0/Sounds/Teleport.wav'
 

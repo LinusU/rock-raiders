@@ -72,7 +72,6 @@ class RockRaiders
 
     @camera = new Camera @
     @mouse = new THREE.Vector2
-    @projector = new THREE.Projector
     @raycaster = new THREE.Raycaster
 
     @div.addEventListener 'click', (event) =>
@@ -108,7 +107,7 @@ class RockRaiders
   click: ->
 
     vector = new THREE.Vector3 @mouse.x, @mouse.y, 1
-    @projector.unprojectVector vector, @camera.camera
+    vector.unproject @camera.camera
     @raycaster.set @camera.camera.position, vector.sub(@camera.camera.position).normalize()
 
     intersects = @raycaster.intersectObjects @scene.children

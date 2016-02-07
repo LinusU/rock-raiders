@@ -1,6 +1,7 @@
 
-geometry = new THREE.CubeGeometry(4, 8, 2)
-material = new THREE.MeshLambertMaterial({ map: new THREE.ImageUtils.loadTexture 'LegoRR0/Vehicles/SmallDigger/Heli-truck-toptex.bmp' })
+loader = new THREE.TextureLoader
+geometry = new THREE.BoxGeometry(4, 8, 2)
+material = new THREE.MeshLambertMaterial({ map: loader.load 'LegoRR0/Vehicles/SmallDigger/Heli-truck-toptex.bmp' })
 
 class RRSmallDigger extends RTS.Object
   geometry: -> geometry
